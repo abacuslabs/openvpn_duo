@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 #
 # Cookbook Name:: openvpn_duo
-# Recipe:: default
+# Library:: resource_openvpn_duo
 #
 # Copyright 2016, Socrata, Inc.
 #
@@ -10,7 +10,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,4 +19,22 @@
 # limitations under the License.
 #
 
-openvpn_duo 'default'
+require 'chef/resource'
+
+class Chef
+  class Resource
+    # A Chef custom resource for the OpenVPN Duo plugin.
+    #
+    # @author Jonathan Hartman <jonathan.hartman@socrata.com>
+    class OpenvpnDuo < Resource
+      default_action :install
+
+      #
+      # Install the OpenVPN Duo plugin.
+      #
+      action :install do
+        package 'duo-openvpn'
+      end
+    end
+  end
+end

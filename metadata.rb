@@ -12,4 +12,6 @@ version '0.0.1'
 source_url 'https://github.com/socrata-cookbooks/openvpn_duo'
 issues_url 'https://github.com/socrata-cookbooks/openvpn_duo/issues'
 
+depends 'packagecloud', '~> 0.2'
+
 supports 'ubuntu'

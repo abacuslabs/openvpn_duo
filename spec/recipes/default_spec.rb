@@ -8,7 +8,7 @@ describe 'openvpn_duo::default' do
   let(:runner) { ChefSpec::SoloRunner.new(platform) }
   let(:chef_run) { runner.converge(described_recipe) }
 
-  it 'converges successfully' do
-    expect(chef_run).to be
+  it 'installs the OpenVPN Duo plugin' do
+    expect(chef_run).to install_openvpn_duo('default')
   end
 end
