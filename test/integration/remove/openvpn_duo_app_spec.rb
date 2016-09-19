@@ -16,7 +16,7 @@ control 'openvpn_duo_app' do
 
   describe package('duo-openvpn') do
     it 'is not installed' do
-      expect(subject).to_no be_installed
+      expect(subject).to_not be_installed
     end
   end
 end
