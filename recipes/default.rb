@@ -19,4 +19,10 @@
 # limitations under the License.
 #
 
-openvpn_duo 'default'
+attrs = node['openvpn_duo']
+
+openvpn_duo 'default' do
+  integration_key attrs['integration_key'] unless attrs['integration_key'].nil?
+  secret_key attrs['secret_key'] unless attrs['secret_key'].nil?
+  hostname attrs['hostname'] unless attrs['hostname'].nil?
+end

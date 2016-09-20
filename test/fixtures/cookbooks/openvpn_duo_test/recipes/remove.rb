@@ -4,5 +4,5 @@
 include_recipe 'openvpn_duo'
 
 openvpn_duo 'default' do
-  action :remove
+  action %i(disable remove)
 end

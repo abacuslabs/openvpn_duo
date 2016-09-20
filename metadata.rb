@@ -13,5 +13,6 @@ source_url 'https://github.com/socrata-cookbooks/openvpn_duo'
 issues_url 'https://github.com/socrata-cookbooks/openvpn_duo/issues'
 
 depends 'packagecloud', '~> 0.2'
+depends 'openvpn', '~> 2.1'
 
 supports 'ubuntu'

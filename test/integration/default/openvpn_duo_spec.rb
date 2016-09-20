@@ -3,10 +3,10 @@
 
 require_relative 'spec_helper'
 
-control 'openvpn_duo_app' do
+control 'openvpn_duo' do
   impact 1.0
-  title 'OpenVPN Duo: Plugin is installed'
-  desc 'The OpenVPN Duo plugin is installed'
+  title 'OpenVPN Duo: Plugin is installed and configured'
+  desc 'The OpenVPN Duo plugin is installed and configured'
 
   describe apt('https://packagecloud.io/socrata-platform/duo-openvpn/ubuntu') do
     it 'exists' do
@@ -21,6 +21,14 @@ control 'openvpn_duo_app' do
   describe package('duo-openvpn') do
     it 'is installed' do
       expect(subject).to be_installed
+    end
+  end
+
+  describe file('/etc/openvpn/server.conf') do
+    it 'has the Duo plugin configured' do
+      r = Regexp.new('^/usr/lib/openvpn/plugins/duo_openvpn\\.so int123 ' \
+                     'secabc example\\.com$')
+      expect(subject.content).to match(r)
     end
   end
 end

@@ -7,6 +7,7 @@ require 'chefspec/berkshelf'
 require 'simplecov'
 require 'simplecov-console'
 require 'coveralls'
+require_relative 'support/matchers'
 
 RSpec.configure do |c|
   c.color = true
