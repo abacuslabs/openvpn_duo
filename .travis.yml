@@ -16,4 +16,4 @@ before_script:
   - cp .kitchen.travis.yml .kitchen.local.yml
 
 script:
-  - chef exec rake
+  - chef exec rake && chef exec kitchen test
