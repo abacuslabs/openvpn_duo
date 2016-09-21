@@ -10,7 +10,7 @@ services:
 
 install:
   - curl -L https://www.chef.io/chef/install.sh | sudo bash -s -- -P chefdk -c current
-  - chef exec bundle install --without=development integration
+  - chef exec bundle install --without=development
 
 before_script:
   - cp .kitchen.travis.yml .kitchen.local.yml
