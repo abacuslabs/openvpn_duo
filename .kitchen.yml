@@ -16,11 +16,6 @@ suites:
   - name: default
     run_list:
       - recipe[openvpn_duo_test]
-    attributes:
-      openvpn_duo:
-        integration_key: int123
-        secret_key: secabc
-        hostname: example.com
   - name: remove
     run_list:
       - recipe[openvpn_duo_test::remove]

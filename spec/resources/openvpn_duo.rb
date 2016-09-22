@@ -50,6 +50,10 @@ shared_context 'resources::openvpn_duo' do
         expect(chef_run).to install_package('duo-openvpn')
       end
 
+      it 'includes the openvpn cookbook' do
+        expect(chef_run).to include_recipe('openvpn')
+      end
+
       it 'adds the duo plugin to the OpenVPN config' do
         expect(chef_run.openvpn_conf('server')).to do_nothing
         expect(chef_run.openvpn_conf('server').plugins).to eq(
@@ -76,6 +80,10 @@ shared_context 'resources::openvpn_duo' do
       include_context description
 
       context 'all required properties set' do
+        it 'includes the openvpn cookbook' do
+          expect(chef_run).to include_recipe('openvpn')
+        end
+
         it 'adds the duo plugin to the OpenVPN config' do
           expect(chef_run.openvpn_conf('server')).to do_nothing
           expect(chef_run.openvpn_conf('server').plugins).to eq(

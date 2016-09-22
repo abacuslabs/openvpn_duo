@@ -56,6 +56,8 @@ class Chef
           end
         end
 
+        include_recipe 'openvpn'
+
         p = '/usr/lib/openvpn/plugins/duo/duo_openvpn.so ' \
             "#{new_resource.integration_key} " \
             "#{new_resource.secret_key} #{new_resource.hostname}"
