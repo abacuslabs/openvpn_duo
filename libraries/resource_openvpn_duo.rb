@@ -56,7 +56,7 @@ class Chef
           end
         end
 
-        p = '/usr/lib/openvpn/plugins/duo_openvpn.so ' \
+        p = '/usr/lib/openvpn/plugins/duo/duo_openvpn.so ' \
             "#{new_resource.integration_key} " \
             "#{new_resource.secret_key} #{new_resource.hostname}"
         with_run_context :root do
@@ -78,7 +78,7 @@ class Chef
         with_run_context :root do
           edit_resource :openvpn_conf, 'server' do
             plugins.delete_if do |p|
-              p.start_with?('/usr/lib/openvpn/plugins/duo_openvpn.so ')
+              p.start_with?('/usr/lib/openvpn/plugins/duo/duo_openvpn.so ')
             end
             action :nothing
           end

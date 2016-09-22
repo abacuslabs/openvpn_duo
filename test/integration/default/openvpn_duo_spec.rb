@@ -26,7 +26,7 @@ control 'openvpn_duo' do
 
   describe file('/etc/openvpn/server.conf') do
     it 'has the Duo plugin configured' do
-      r = Regexp.new('^/usr/lib/openvpn/plugins/duo_openvpn\\.so int123 ' \
+      r = Regexp.new('^/usr/lib/openvpn/plugins/duo/duo_openvpn\\.so int123 ' \
                      'secabc example\\.com$')
       expect(subject.content).to match(r)
     end

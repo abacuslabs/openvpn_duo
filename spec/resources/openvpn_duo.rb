@@ -53,7 +53,8 @@ shared_context 'resources::openvpn_duo' do
       it 'adds the duo plugin to the OpenVPN config' do
         expect(chef_run.openvpn_conf('server')).to do_nothing
         expect(chef_run.openvpn_conf('server').plugins).to eq(
-          ['/usr/lib/openvpn/plugins/duo_openvpn.so int123 secabc example.com']
+          ['/usr/lib/openvpn/plugins/duo/duo_openvpn.so int123 secabc ' \
+           'example.com']
         )
         expect(chef_run).to write_log(
           'Generate the OpenVPN config with Duo enabled'
@@ -78,7 +79,7 @@ shared_context 'resources::openvpn_duo' do
         it 'adds the duo plugin to the OpenVPN config' do
           expect(chef_run.openvpn_conf('server')).to do_nothing
           expect(chef_run.openvpn_conf('server').plugins).to eq(
-            ['/usr/lib/openvpn/plugins/duo_openvpn.so int123 secabc ' \
+            ['/usr/lib/openvpn/plugins/duo/duo_openvpn.so int123 secabc ' \
              'example.com']
           )
           expect(chef_run).to write_log(
