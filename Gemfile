@@ -23,7 +23,7 @@ group :test do
   gem 'fauxhai'
   gem 'test-kitchen'
   gem 'kitchen-vagrant'
-  gem 'kitchen-docker'
+  gem 'kitchen-dokken'
 end
 
 group :integration do

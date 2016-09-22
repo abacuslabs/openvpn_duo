@@ -1,4 +1,21 @@
 ---
 driver:
-  name: docker
+  name: dokken
   privileged: true
+  chef_version: latest
+
+transport:
+  name: dokken
+
+provisioner:
+  name: dokken
+
+platforms:
+  - name: ubuntu-16.04
+    driver:
+      image: ubuntu:16.04
+      pid_one_command: /lib/systemd/systemd
+  - name: ubuntu-14.04
+    driver:
+      image: ubuntu:14.04
+      pid_one_command: /sbin/init
