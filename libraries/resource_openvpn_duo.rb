@@ -66,9 +66,9 @@ class Chef
             plugins.include?(p) || plugins << p
             action :nothing
           end
-        end
-        log 'Generate the OpenVPN config with Duo enabled' do
-          notifies :create, 'openvpn_conf[server]'
+          log 'Generate the OpenVPN config with Duo enabled' do
+            notifies :create, 'openvpn_conf[server]'
+          end
         end
       end
 
@@ -84,9 +84,9 @@ class Chef
             end
             action :nothing
           end
-        end
-        log 'Generate the OpenVPN config with Duo disabled' do
-          notifies :create, 'openvpn_conf[server]'
+          log 'Generate the OpenVPN config with Duo disabled' do
+            notifies :create, 'openvpn_conf[server]'
+          end
         end
       end
     end

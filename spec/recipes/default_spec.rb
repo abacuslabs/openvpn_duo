@@ -20,6 +20,14 @@ describe 'openvpn_duo::default' do
     let(:secret_key) { 'abc123' }
     let(:hostname) { 'example.com' }
 
+    it 'includes the openvpn cookbook' do
+      expect(chef_run).to include_recipe('openvpn')
+    end
+
+    it 'modifies the openvpn_conf resource' do
+      expect(chef_run.openvpn_conf('server')).to do_nothing
+    end
+
     it 'installs the OpenVPN Duo plugin' do
       expect(chef_run).to install_openvpn_duo('default')
         .with(integration_key: integration_key,
