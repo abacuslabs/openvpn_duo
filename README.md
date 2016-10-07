@@ -10,65 +10,89 @@ Openvpn_Duo Cookbook
 [codeclimate]: https://codeclimate.com/github/socrata-cookbooks/openvpn_duo
 [coveralls]: https://coveralls.io/r/socrata-cookbooks/openvpn_duo
 
-TODO: Enter the cookbook description here.
+A Chef cookbook for the OpenVPN Duo plugin.
 
 Requirements
 ============
 
-TODO: Describe cookbook dependencies.
+This cookbook depends on the openvpn and packagecloud community cookbooks, for
+the OpenVPN server itself and for the packaged version of the plugin that we
+build in PackageCloud.io.
+
+It primarily supports Ubuntu. There is support for RHEL platforms as well, but
+the openvpn cookbook as currently released has some issues related to Systemd
+that RHEL users will need to work around on their own.
+
+It requires Chef 12.5+ or Chef 12 and the compat_resource cookbook.
 
 Usage
 =====
 
-TODO: Describe how to use the cookbook.
+Either add the default recipe to your node's run list or use the included
+custom resource in a recipe of your own.
 
 Recipes
 =======
 
 ***default***
 
-TODO: Describe each component recipe.
+Ensure the OpenVPN server is installed, patch it to delay writing the config
+file and starting the service until the end of the Chef run, then install and
+configure the plugin based on Chef attributes (below).
 
 Attributes
 ==========
 
 ***default***
 
-TODO: Describe any noteworthy attributes.
+The Duo plugin requires three pieces of information to function, all of which
+can be set via attributes:
+
+    node['openvpn_duo']['integration_key']
+    node['openvpn_duo']['secret_key']
+    node['openvpn_duo']['hostname']
 
 Resources
 =========
 
 ***openvpn_duo***
 
-TODO: Describe each included resource.
+The main resource for managing the plugin.
 
 Syntax:
 
-    openvpn_duo 'my_resource' do
-        attribute1 'value1'
-        action :create
+    openvpn_duo 'default' do
+      integration_key '123'
+      secret_key 'abcd'
+      hostname 'example.com'
+      action %i(install enable)
     end
 
 Actions:
 
-| Action  | Description  |
-|---------|--------------|
-| action1 | Do something |
+| Action     | Description                                      |
+|------------|--------------------------------------------------|
+| `:install` | Install the plugin package                       |
+| `:enable`  | Patch the plugin into the OpenVPN server config  |
+| `:remove`  | Uninstall the plugin package                     |
+| `:disable` | Remove the plugin from the OpenVPN server config |
 
-Attributes:
+Properties:
 
-| Attribute  | Default        | Description          |
-|------------|----------------|----------------------|
-| attribute1 | `'some_value'` | Do something         |
-| action     | `:create`      | Action(s) to perform |
+| Property        | Default              | Description             |
+|-----------------|----------------------|-------------------------|
+| integration_key | `nil`                | The Duo integration key |
+| secret_key      | `nil`                | The Duo secret key      |
+| hostname        | `nil`                | The Duo hostname        |
+| action          | `%i(install enable)` | Action(s) to perform    |
 
-Providers
-=========
+***openvpn_duo_rhel***
 
-TODO: Describe each included provider
+The RHEL implementation of the `openvpn_duo` resource.
 
-***Chef::Provider::SomeProvider***
+***openvpn_duo_ubuntu***
+
+The Ubuntu implementation of the `openvpn_duo` resource.
 
 Contributing
 ============
