@@ -28,6 +28,10 @@ describe 'openvpn_duo::default' do
       expect(chef_run.openvpn_conf('server')).to do_nothing
     end
 
+    it 'modifies the openvpn service resource' do
+      expect(chef_run.service('openvpn')).to do_nothing
+    end
+
     it 'installs the OpenVPN Duo plugin' do
       expect(chef_run).to install_openvpn_duo('default')
         .with(integration_key: integration_key,

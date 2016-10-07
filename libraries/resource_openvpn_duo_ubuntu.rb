@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 #
 # Cookbook Name:: openvpn_duo
-# Library:: resource_openvpn_duo
+# Library:: resource_openvpn_duo_ubuntu
 #
 # Copyright 2016, Socrata, Inc.
 #

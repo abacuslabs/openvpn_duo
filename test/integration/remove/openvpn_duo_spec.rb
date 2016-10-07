@@ -8,9 +8,19 @@ control 'openvpn_duo' do
   title 'OpenVPN Duo: Plugin is uninstalled'
   desc 'The OpenVPN Duo plugin is uninstalled'
 
-  describe apt('https://packagecloud.io/socrata-platform/duo-openvpn/ubuntu') do
-    it 'does not exist' do
-      expect(subject).to_not exist
+  case os[:family]
+  when 'debian'
+    describe apt('https://packagecloud.io/socrata-platform/duo-openvpn/' \
+                 'ubuntu') do
+      it 'does not exist' do
+        expect(subject).to_not exist
+      end
+    end
+  when 'rhel'
+    describe yum.repo('socrata-platform_duo-openvpn') do
+      it 'does not exist' do
+        expect(subject).to_not exist
+      end
     end
   end
 

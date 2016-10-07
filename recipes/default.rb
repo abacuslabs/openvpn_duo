@@ -27,6 +27,10 @@ edit_resource :openvpn_conf, 'server' do
   action :nothing
 end
 
+edit_resource :service, 'openvpn' do
+  action :nothing
+end
+
 openvpn_duo 'default' do
   integration_key attrs['integration_key'] unless attrs['integration_key'].nil?
   secret_key attrs['secret_key'] unless attrs['secret_key'].nil?
