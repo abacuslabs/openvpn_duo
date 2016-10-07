@@ -16,3 +16,6 @@ depends 'packagecloud', '~> 0.2'
 depends 'openvpn', '~> 2.1'
 
 supports 'ubuntu'
+supports 'redhat'
+supports 'centos'
+supports 'scientific'

@@ -19,3 +19,9 @@ platforms:
     driver:
       image: ubuntu:14.04
       pid_one_command: /sbin/init
+  - name: centos-7
+    driver:
+      image: centos:7
+      pid_one_command: /lib/systemd/systemd
+      intermediate_instructions:
+        - RUN yum -y install iproute
