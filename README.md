@@ -23,7 +23,7 @@ It primarily supports Ubuntu. There is support for RHEL platforms as well, but
 the openvpn cookbook as currently released has some issues related to Systemd
 that RHEL users will need to work around on their own.
 
-It requires Chef 12.5+ or Chef 12 and the compat_resource cookbook.
+It requires Chef 12.10.24+ or Chef 12 and the compat_resource cookbook.
 
 Usage
 =====
