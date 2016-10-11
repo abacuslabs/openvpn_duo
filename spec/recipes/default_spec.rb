@@ -24,12 +24,15 @@ describe 'openvpn_duo::default' do
       expect(chef_run).to include_recipe('openvpn')
     end
 
-    it 'modifies the openvpn_conf resource' do
-      expect(chef_run.openvpn_conf('server')).to do_nothing
-    end
-
     it 'modifies the openvpn service resource' do
       expect(chef_run.service('openvpn')).to do_nothing
+    end
+
+    it 'uses a log resource to notify the openvpn service' do
+      l = 'Perform OpenVPN service actions delayed by openvpn_duo'
+      expect(chef_run).to write_log(l)
+      expect(chef_run.log(l)).to notify('service[openvpn]').to(:enable)
+      expect(chef_run.log(l)).to notify('service[openvpn]').to(:start)
     end
 
     it 'installs the OpenVPN Duo plugin' do

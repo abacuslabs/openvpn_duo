@@ -60,24 +60,10 @@ shared_context 'resources::openvpn_duo' do
       end
 
       it 'adds the duo plugin to the OpenVPN config' do
-        expect(chef_run.openvpn_conf('server')).to do_nothing
         expect(chef_run.openvpn_conf('server').plugins).to eq(
           ['/usr/lib/openvpn/plugins/duo/duo_openvpn.so int123 secabc ' \
            'example.com']
         )
-        expect(chef_run).to write_log(
-          'Perform the OpenVPN actions delayed by Duo'
-        )
-        expect(chef_run.log('Perform the OpenVPN actions delayed by Duo'))
-          .to notify('openvpn_conf[server]').to(:create)
-      end
-
-      it 'delays starting the openvpn service' do
-        expect(chef_run.service('openvpn')).to do_nothing
-        expect(chef_run.log('Perform the OpenVPN actions delayed by Duo'))
-          .to notify('service[openvpn]').to(:enable)
-        expect(chef_run.log('Perform the OpenVPN actions delayed by Duo'))
-          .to notify('service[openvpn]').to(:start)
       end
     end
 
@@ -106,24 +92,10 @@ shared_context 'resources::openvpn_duo' do
         end
 
         it 'adds the duo plugin to the OpenVPN config' do
-          expect(chef_run.openvpn_conf('server')).to do_nothing
           expect(chef_run.openvpn_conf('server').plugins).to eq(
             ['/usr/lib/openvpn/plugins/duo/duo_openvpn.so int123 secabc ' \
              'example.com']
           )
-          expect(chef_run).to write_log(
-            'Perform the OpenVPN actions delayed by Duo'
-          )
-          expect(chef_run.log('Perform the OpenVPN actions delayed by Duo'))
-            .to notify('openvpn_conf[server]').to(:create)
-        end
-
-        it 'delays starting the openvpn service' do
-          expect(chef_run.service('openvpn')).to do_nothing
-          expect(chef_run.log('Perform the OpenVPN actions delayed by Duo'))
-            .to notify('service[openvpn]').to(:enable)
-          expect(chef_run.log('Perform the OpenVPN actions delayed by Duo'))
-            .to notify('service[openvpn]').to(:start)
         end
       end
 
@@ -167,14 +139,12 @@ shared_context 'resources::openvpn_duo' do
         expect(chef_run).to disable_openvpn_duo(name)
       end
 
+      it 'includes the openvpn cookbook' do
+        expect(chef_run).to include_recipe('openvpn')
+      end
+
       it 'does not add the Duo plugin to the OpenVPN config' do
-        expect(chef_run.openvpn_conf('server')).to do_nothing
         expect(chef_run.openvpn_conf('server').plugins).to eq([])
-        expect(chef_run).to write_log(
-          'Generate the OpenVPN config with Duo disabled'
-        )
-        expect(chef_run.log('Generate the OpenVPN config with Duo disabled'))
-          .to notify('openvpn_conf[server]').to(:create)
       end
     end
   end

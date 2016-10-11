@@ -23,12 +23,13 @@ attrs = node['openvpn_duo']
 
 include_recipe 'openvpn'
 
-edit_resource :openvpn_conf, 'server' do
+edit_resource :service, 'openvpn' do
   action :nothing
 end
 
-edit_resource :service, 'openvpn' do
-  action :nothing
+log "Perform OpenVPN service actions delayed by #{cookbook_name}" do
+  notifies :enable, 'service[openvpn]'
+  notifies :start, 'service[openvpn]'
 end
 
 openvpn_duo 'default' do
