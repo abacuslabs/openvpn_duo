@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 #
 # Cookbook Name:: openvpn_duo
-# Library:: resource_openvpn_duo_ubuntu
+# Library:: resource_openvpn_duo_rhel
 #
 # Copyright 2016, Socrata, Inc.
 #
@@ -23,17 +23,17 @@ require_relative 'resource_openvpn_duo'
 
 class Chef
   class Resource
-    # A Chef custom resource for the OpenVPN Duo plugin for Ubuntu.
+    # A Chef custom resource for the OpenVPN Duo plugin for RHEL.
     #
     # @author Jonathan Hartman <jonathan.hartman@socrata.com>
-    class OpenvpnDuoUbuntu < OpenvpnDuo
-      provides :openvpn_duo, platform: 'ubuntu'
+    class OpenvpnDuoRhel < OpenvpnDuo
+      provides :openvpn_duo, platform_family: 'rhel'
 
       #
       # Install the OpenVPN Duo plugin.
       #
       action :install do
-        packagecloud_repo('socrata-platform/duo-openvpn') { type 'deb' }
+        packagecloud_repo('socrata-platform/duo-openvpn') { type 'rpm' }
         super()
       end
 
@@ -41,8 +41,8 @@ class Chef
       # Remove the OpenVPN Duo plugin.
       #
       action :remove do
-        package('duo-openvpn') { action :purge }
-        apt_repository('socrata-platform_duo-openvpn') { action :remove }
+        package('duo-openvpn') { action :remove }
+        yum_repository('socrata-platform_duo-openvpn') { action :remove }
       end
     end
   end

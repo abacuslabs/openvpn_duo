@@ -8,13 +8,27 @@ control 'openvpn_duo' do
   title 'OpenVPN Duo: Plugin is installed and configured'
   desc 'The OpenVPN Duo plugin is installed and configured'
 
-  describe apt('https://packagecloud.io/socrata-platform/duo-openvpn/ubuntu') do
-    it 'exists' do
-      expect(subject).to exist
-    end
+  case os[:family]
+  when 'debian'
+    describe apt('https://packagecloud.io/socrata-platform/duo-openvpn/' \
+                 'ubuntu') do
+      it 'exists' do
+        expect(subject).to exist
+      end
 
-    it 'is enabled' do
-      expect(subject).to be_enabled
+      it 'is enabled' do
+        expect(subject).to be_enabled
+      end
+    end
+  when 'rhel'
+    describe yum.repo('socrata-platform_duo-openvpn') do
+      it 'exists' do
+        expect(subject).to exist
+      end
+
+      it 'is enabled' do
+        expect(subject).to be_enabled
+      end
     end
   end
 

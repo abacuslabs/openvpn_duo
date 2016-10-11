@@ -19,6 +19,7 @@
 # limitations under the License.
 #
 
+require 'chef/dsl/include_recipe'
 require 'chef/exceptions'
 require 'chef/resource'
 
@@ -28,6 +29,8 @@ class Chef
     #
     # @author Jonathan Hartman <jonathan.hartman@socrata.com>
     class OpenvpnDuo < Resource
+      include Chef::DSL::IncludeRecipe
+
       default_action %i(install enable)
 
       #
@@ -38,6 +41,52 @@ class Chef
       property :hostname, String
 
       #
+      # If the resource is to be enabled, shove the plugin into the root run
+      # context's config resource at compile time so it only gets rendered once
+      # and service notifications don't happen in an impossible order.
+      #
+      def after_created
+        Array(action).each do |act|
+          case act
+          when :enable
+            enable_plugin_shim!
+          when :disable
+            disable_plugin_shim!
+          end
+        end
+      end
+
+      #
+      # Include the OpenVPN cookbook and immediately the Duo plugin into its
+      # openvpn_conf resource.
+      #
+      def enable_plugin_shim!
+        disable_plugin_shim!
+        str = "#{path} #{integration_key} #{secret_key} #{hostname}"
+        resources(openvpn_conf: 'server').plugins << str
+      end
+
+      #
+      # Include the OpenVPN cookbook and immediately remove the Duo plugin
+      # from its openvpn_conf resource.
+      #
+      def disable_plugin_shim!
+        include_recipe 'openvpn'
+        resources(openvpn_conf: 'server').plugins.delete_if do |p|
+          p.start_with?(path)
+        end
+      end
+
+      #
+      # Return the path to the main Duo plugin file.
+      #
+      # @return [String] the Duo plugin's filesystem path
+      #
+      def path
+        '/usr/lib/openvpn/plugins/duo/duo_openvpn.so'
+      end
+
+      #
       # Install the OpenVPN Duo plugin.
       #
       action :install do
@@ -45,7 +94,8 @@ class Chef
       end
 
       #
-      # Enable the Duo plugin by inserting it into OpenVPN's server config.
+      # Enable the Duo plugin by inserting it into OpenVPN's server config. The
+      # actual enabling is handled by the after_created method.
       #
       action :enable do
         # These properties are only required for the :enable action.
@@ -55,39 +105,14 @@ class Chef
                   "A '#{p}' property is required for the :enable action")
           end
         end
-
-        include_recipe 'openvpn'
-
-        p = '/usr/lib/openvpn/plugins/duo/duo_openvpn.so ' \
-            "#{new_resource.integration_key} " \
-            "#{new_resource.secret_key} #{new_resource.hostname}"
-        with_run_context :root do
-          edit_resource :openvpn_conf, 'server' do
-            plugins.include?(p) || plugins << p
-            action :nothing
-          end
-          log 'Generate the OpenVPN config with Duo enabled' do
-            notifies :create, 'openvpn_conf[server]'
-          end
-        end
       end
 
       #
       # Ensure the plugin is removed from the plugins array for the OpenVPN
-      # config.
+      # config. This action doesn't actually need to do anything, i.e. not
+      # add the plugin into the run context's openvpn_conf resource.
       #
       action :disable do
-        with_run_context :root do
-          edit_resource :openvpn_conf, 'server' do
-            plugins.delete_if do |p|
-              p.start_with?('/usr/lib/openvpn/plugins/duo/duo_openvpn.so ')
-            end
-            action :nothing
-          end
-          log 'Generate the OpenVPN config with Duo disabled' do
-            notifies :create, 'openvpn_conf[server]'
-          end
-        end
       end
     end
   end
