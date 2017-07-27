@@ -62,8 +62,14 @@ class Chef
       #
       def enable_plugin_shim!
         disable_plugin_shim!
-        str = "#{path} #{integration_key} #{secret_key} #{hostname}"
-        resources(openvpn_conf: 'server').plugins << str
+        serverStr = %{#{path} #{integration_key} #{secret_key} #{hostname}
+
+# This option will determine how often OpenVPN forces a renegotiation,
+# thereby requiring the user to re-authenticate with Duo.
+# you can disable reneg-sec by setting it to 0
+reneg-sec 0
+        }
+        resources(openvpn_conf: 'server').plugins << serverStr
       end
 
       #
